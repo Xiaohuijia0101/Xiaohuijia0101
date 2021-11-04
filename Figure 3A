@@ -1,0 +1,24 @@
+nsclc$CIP<-factor(nsclc$CIP,levels=c("0","1"))
+
+#logistic regression model
+fm<-glm(CIP~HBP+ILD+Emphysema+PLR,data=nsclc,family="binomial")
+
+summary(fm)
+
+#The indexation of regression coefficients
+exp(coef(fm))
+
+#95% confidence intervals for regression coefficients
+exp(confint(fm))
+
+#Plotted ROC curve
+#install.packages("pROC")
+library("pROC")
+fit2 <-glm(CIP~HBP+ILD+Emphysema+PLR,data=nsclc,family="binomial")
+pre <- predict(fit2,type='response')
+plot.roc(nsclc$CIP, pre,
+         main="ROC Curve", percent=TRUE,
+         print.auc=TRUE,
+         ci=TRUE, of="thresholds",
+         thresholds="best",
+         print.thres="best")
