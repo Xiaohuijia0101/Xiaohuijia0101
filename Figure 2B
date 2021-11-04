@@ -1,0 +1,11 @@
+#Plotted ROC curve  
+#install.packages("pROC")
+library("pROC")
+fit2 <-glm(CIP~HBP+ILD+Emphysema+PLR,data=nsclc,family="binomial")
+pre <- predict(fit2,type='response')
+plot.roc(nsclc$CIP, pre,
+         main="ROC Curve", percent=TRUE,
+         print.auc=TRUE,
+         ci=TRUE, of="thresholds",
+         thresholds="best",
+         print.thres="best")
