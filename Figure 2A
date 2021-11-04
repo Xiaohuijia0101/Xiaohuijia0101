@@ -1,0 +1,33 @@
+nsclc$CIP<-factor(nsclc$CIP,levels=c("0","1"))
+
+#logistic regression model
+fm<-glm(CIP~HBP+ILD+Emphysema+PLR,data=nsclc,family="binomial")
+
+summary(fm)
+
+#The indexation of regression coefficients
+exp(coef(fm))
+
+#95% confidence intervals for regression coefficients
+exp(confint(fm))
+
+
+
+#nomogram
+library(rms)
+CIP_occurence <- nsclc$CIP
+HBP <- nsclc$HBP
+Emphysema<- nsclc$Emphysema
+PLR<- nsclc$PLR 
+ILD<- nsclc$ILD
+CIP<- nsclc$CIP
+
+ddist <- datadist(HBP,Emphysema,PLR,ILD,CIP)
+options(datadist = 'ddist')
+fit1 <- lrm(CIP_occurence ~ HBP+ILD+Emphysema+PLR )
+
+nom <- nomogram(fit1, fun=plogis,fun.at=c(.001, .01, .05, seq(.1,.9, by=.1), .95, .99, .999),lp=F, funlabel="Risk")
+pdf("nom.pdf")
+plot(nom,col.grid=c("tomato","darkcyan"),xfrac=0.25)
+dev.off()
+fit1
