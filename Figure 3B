@@ -1,0 +1,4 @@
+#Calibration curve
+fit2 <- lrm(CIP_occurence ~ HBP+ILD+Emphysema+PLR , x = TRUE,y = TRUE)
+cal <- calibrate(fit2,  method = "boot", B = 30)
+plot(cal,xlab = "Nomogram Predicted CIP", ylab = "Actual CIP",main = "Calibration Curve")
