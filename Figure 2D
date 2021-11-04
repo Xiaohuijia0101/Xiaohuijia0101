@@ -1,0 +1,24 @@
+#DCA curve
+install.packages("rmda")
+library(rmda)
+
+simpleHBP<- decision_curve(CIP~HBP,data = nsclc, family = binomial(link ='logit'),
+                          thresholds= seq(0,1, by = 0.01),confidence.intervals =0.95)
+simpleEmphysema<- decision_curve(CIP~Emphysema,data = nsclc, family = binomial(link ='logit'),
+                                 thresholds= seq(0,1, by = 0.01),confidence.intervals =0.95)
+simpleILD<- decision_curve(CIP~ILD,data = nsclc, family = binomial(link ='logit'),
+                           thresholds= seq(0,1, by = 0.01),confidence.intervals =0.95)
+simplePLR<- decision_curve(CIP~PLR,data = nsclc, family = binomial(link ='logit'),
+                           thresholds= seq(0,1, by = 0.01),confidence.intervals =0.95)
+
+complex<- decision_curve(CIP~ HBP+ILD+Emphysema+PLR,data = nsclc,
+                         
+                         family = binomial(link ='logit'), thresholds = seq(0,1, by = 0.01),
+                         
+                         confidence.intervals= 0.95)
+
+List<- list(simpleHBP,simpleILD,simpleEmphysema,simplePLR,complex)
+
+plot_decision_curve(List,curve.names= c('HBP','ILD','Emphysema','PLR','nomogram'),
+                    cost.benefit.axis =FALSE,col = c('#CCFF00FF','#33FF00FF','#00FFFFFF','#CC00FFFF','#FF0000FF'),
+                    confidence.intervals =FALSE,standardize = FALSE)
